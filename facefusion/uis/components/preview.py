@@ -1,5 +1,5 @@
 from time import sleep
-from typing import Optional
+from typing import Optional, List
 
 import cv2
 import gradio
@@ -10,7 +10,7 @@ from facefusion.audio import create_empty_audio_frame, get_audio_frame
 from facefusion.common_helper import get_first
 from facefusion.core import conditional_append_reference_faces
 from facefusion.face_analyser import get_average_face, get_many_faces
-from facefusion.face_selector import sort_faces_by_order
+from facefusion.face_selector import sort_faces_by_order, sort_and_filter_faces
 from facefusion.face_store import clear_reference_faces, clear_static_faces, get_reference_faces
 from facefusion.filesystem import filter_audio_paths, is_image, is_video
 from facefusion.processors.core import get_processors_modules
@@ -239,5 +239,15 @@ def update_preview_frame_slider() -> gradio.Slider:
 
 def process_preview_frame(reference_faces : FaceSet, source_face : Face, source_audio_frame : AudioFrame, target_vision_frame : VisionFrame) -> VisionFrame:
 	target_vision_frame = resize_frame_resolution(target_vision_frame, (1024, 1024))
-	source_vision_frame = target_vision_frame.copy()
+	target_faces = sort_and_filter_faces(get_many_faces([ target_vision_frame ]))
+	for processor_module in get_processors_modules(state_manager.get_item('processors')):
+		if processor_module.pre_process('preview'):
+			processor_args = {
+				'reference_faces': reference_faces,
+				'source_face': source_face,
+				'source_audio_frame': source_audio_frame,
+				'target_vision_frame': target_vision_frame,
+				'target_faces': target_faces
+			}
+			target_vision_frame = processor_module.process_frame(processor_args)
 	return target_vision_frame
