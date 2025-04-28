@@ -56,6 +56,7 @@ def render() -> None:
 			target_video_options['visible'] = True
 	TARGET_IMAGE = gradio.Image(**target_image_options)
 	TARGET_VIDEO = gradio.Video(**target_video_options)
+	register_ui_component('target_file', TARGET_FILE)
 	register_ui_component('target_image', TARGET_IMAGE)
 	register_ui_component('target_video', TARGET_VIDEO)
 

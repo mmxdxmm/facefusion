@@ -35,6 +35,9 @@ def render() -> gradio.Blocks:
 				with gradio.Blocks():
 					frame_enhancer_options.render()
 				with gradio.Blocks():
+					from facefusion.uis.components import hair_modifier_options
+					hair_modifier_options.render()
+				with gradio.Blocks():
 					lip_syncer_options.render()
 				with gradio.Blocks():
 					execution.render()
@@ -53,6 +56,9 @@ def render() -> gradio.Blocks:
 					source.render()
 				with gradio.Blocks():
 					target.render()
+				with gradio.Blocks():
+					from facefusion.uis.components import target_options
+					target_options.render()
 				with gradio.Blocks():
 					output.render()
 				with gradio.Blocks():
@@ -91,6 +97,8 @@ def listen() -> None:
 	face_swapper_options.listen()
 	frame_colorizer_options.listen()
 	frame_enhancer_options.listen()
+	from facefusion.uis.components import hair_modifier_options
+	hair_modifier_options.listen()
 	lip_syncer_options.listen()
 	execution.listen()
 	execution_thread_count.listen()
@@ -101,6 +109,8 @@ def listen() -> None:
 	output_options.listen()
 	source.listen()
 	target.listen()
+	from facefusion.uis.components import target_options
+	target_options.listen()
 	output.listen()
 	instant_runner.listen()
 	job_runner.listen()

@@ -138,6 +138,7 @@ def listen() -> None:
 		'face_mask_padding_bottom_slider',
 		'face_mask_padding_left_slider',
 		'face_mask_padding_right_slider',
+		'hair_modifier_direction_slider',
 		'output_video_fps_slider'
 	]):
 		ui_component.release(update_preview_image, inputs = PREVIEW_FRAME_SLIDER, outputs = PREVIEW_IMAGE)
@@ -164,7 +165,8 @@ def listen() -> None:
 		'face_detector_angles_checkbox_group',
 		'face_landmarker_model_dropdown',
 		'face_occluder_model_dropdown',
-		'face_parser_model_dropdown'
+		'face_parser_model_dropdown',
+		'hair_modifier_model_dropdown'
 	]):
 		ui_component.change(clear_and_update_preview_image, inputs = PREVIEW_FRAME_SLIDER, outputs = PREVIEW_IMAGE)
 
