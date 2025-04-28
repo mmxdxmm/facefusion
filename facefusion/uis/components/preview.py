@@ -8,7 +8,6 @@ import numpy
 from facefusion import logger, process_manager, state_manager, wording
 from facefusion.audio import create_empty_audio_frame, get_audio_frame
 from facefusion.common_helper import get_first
-from facefusion.content_analyser import analyse_frame
 from facefusion.core import conditional_append_reference_faces
 from facefusion.face_analyser import get_average_face, get_many_faces
 from facefusion.face_selector import sort_faces_by_order
@@ -241,19 +240,4 @@ def update_preview_frame_slider() -> gradio.Slider:
 def process_preview_frame(reference_faces : FaceSet, source_face : Face, source_audio_frame : AudioFrame, target_vision_frame : VisionFrame) -> VisionFrame:
 	target_vision_frame = resize_frame_resolution(target_vision_frame, (1024, 1024))
 	source_vision_frame = target_vision_frame.copy()
-	if analyse_frame(target_vision_frame):
-		return cv2.GaussianBlur(target_vision_frame, (99, 99), 0)
-
-	for processor_module in get_processors_modules(state_manager.get_item('processors')):
-		logger.disable()
-		if processor_module.pre_process('preview'):
-			target_vision_frame = processor_module.process_frame(
-			{
-				'reference_faces': reference_faces,
-				'source_face': source_face,
-				'source_audio_frame': source_audio_frame,
-				'source_vision_frame': source_vision_frame,
-				'target_vision_frame': target_vision_frame
-			})
-		logger.enable()
 	return target_vision_frame

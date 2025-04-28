@@ -6,10 +6,9 @@ from time import time
 
 import numpy
 
-from facefusion import content_analyser, face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, logger, process_manager, state_manager, voice_extractor, wording
+from facefusion import face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, logger, process_manager, state_manager, voice_extractor, wording
 from facefusion.args import apply_args, collect_job_args, reduce_job_args, reduce_step_args
 from facefusion.common_helper import get_first
-from facefusion.content_analyser import analyse_image, analyse_video
 from facefusion.download import conditional_download_hashes, conditional_download_sources
 from facefusion.exit_helper import conditional_exit, graceful_exit, hard_exit
 from facefusion.face_analyser import get_average_face, get_many_faces, get_one_face
@@ -103,7 +102,6 @@ def pre_check() -> bool:
 def common_pre_check() -> bool:
 	common_modules =\
 	[
-		content_analyser,
 		face_classifier,
 		face_detector,
 		face_landmarker,
@@ -125,7 +123,6 @@ def processors_pre_check() -> bool:
 def force_download() -> ErrorCode:
 	common_modules =\
 	[
-		content_analyser,
 		face_classifier,
 		face_detector,
 		face_landmarker,
@@ -339,8 +336,6 @@ def conditional_append_reference_faces() -> None:
 
 
 def process_image(start_time : float) -> ErrorCode:
-	if analyse_image(state_manager.get_item('target_path')):
-		return 3
 	# clear temp
 	logger.debug(wording.get('clearing_temp'), __name__)
 	clear_temp_directory(state_manager.get_item('target_path'))
@@ -390,8 +385,6 @@ def process_image(start_time : float) -> ErrorCode:
 
 def process_video(start_time : float) -> ErrorCode:
 	trim_frame_start, trim_frame_end = restrict_trim_frame(state_manager.get_item('target_path'), state_manager.get_item('trim_frame_start'), state_manager.get_item('trim_frame_end'))
-	if analyse_video(state_manager.get_item('target_path'), trim_frame_start, trim_frame_end):
-		return 3
 	# clear temp
 	logger.debug(wording.get('clearing_temp'), __name__)
 	clear_temp_directory(state_manager.get_item('target_path'))
